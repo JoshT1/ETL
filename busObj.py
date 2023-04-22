@@ -1,6 +1,6 @@
 class Bus:
-    # __tablename__ = 'card_data'
 
+# An object used to store the business data temporarily until inserted into a database
     def __init__(self, **kwargs):
         default_values = {'companyName': 'Null', 'address': 'Null', 'execName': 'Null', 'city': 'Null',
                           'state': 'Null', 'zip': 'Null', 'cs': 'Null', 'execTit': 'Null', 'fax': 'Null',

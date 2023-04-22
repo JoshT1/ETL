@@ -3,8 +3,9 @@ from requestDetails import requestDetails
 import g
 import sqlite3
 
-def main(requestKey):
-    # connect to DB
+
+def main(rKey):
+    # connect to sqlite DB
     sqliteConnection = sqlite3.connect('refusa.db')
 
     # create cursor
@@ -39,17 +40,22 @@ def main(requestKey):
     cursor.execute(table)
 
     # Get the page count from the request
-    pages = requestPage(requestKey, 0)
+    pages = requestPage(rKey, 0)
     g.sleep(g.st)
 
     # For each page, find request parameters for the business details
     for i in range(pages):
         busObj = g.Bus()
         i += 1
-        # Find recordId parameters and store it in a list
-        requestList = requestPage(requestKey, i)
+
+        # Find recordId parameters and store it in a list, should be 25 per page
+        requestList = requestPage(rKey, i)
         g.sleep(g.st)
-        busList = requestDetails(requestList, requestKey, busObj)
+
+        # busList is a list of business objects, should return 25 business objects in busList
+        busList = requestDetails(requestList, rKey, busObj)
+
+        # Insert business objects into the database
         query = '''INSERT INTO bus 
                    (RecordId, CompanyName, Address, City, State, Zip, CreditScore, ExecName, ExecTitle, 
                     Phone, Fax, IUSA, EmpMin, EmpMax, SIC, NAICS)
@@ -75,9 +81,10 @@ def main(requestKey):
                                    'SIC': busList[j].sic,
                                    'NAICS': busList[j].naics})
             cursor.commit()
-        print("gottem")
 
 
 if __name__ == '__main__':
-    requestKey = 'dabfa2679990450084246c25c56df1bf'
+    requestKey = ''
+    # Pass reference key as the main argument, this is acquired from the
+    # search query URL or from inspecting the network requests
     main(requestKey)
