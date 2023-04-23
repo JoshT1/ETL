@@ -77,7 +77,6 @@ def requestDetails(rList, rKey, busObj):
             g.ebo *= epo
             print(g.ebo)
             print(i)
-            print("You have fucked up somewhere")
             g.sleep(g.ebo)
         except (g.requests.Timeout, TypeError, KeyError, IndexError) as err:
             print(err)
